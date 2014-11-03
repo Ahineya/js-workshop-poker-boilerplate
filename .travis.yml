@@ -6,7 +6,7 @@ before_script:
 - bower install
 - export DISPLAY=:99.0
 - sh -e /etc/init.d/xvfb start
-deploy:
-  provider: heroku
-  api_key:
-    secure: C0dyWKcCP3UCEMrsIKMa2iH0b7yDr1mSjVFtWGNytryTeoB+OTU8+UvSZO8vFUGlOvS9BKMrTg3YiQGzN8f4mmxtRpYY5DOd89P86S/cN9gE3UAsMDAnMqX29oDxCD0l4xJxIEnbExr3jqHFIi3DO1n1bv63hHKEZ9iOFVH4PuM=
+#deploy:
+#  provider: heroku
+#  api_key:
+#    secure: C0dyWKcCP3UCEMrsIKMa2iH0b7yDr1mSjVFtWGNytryTeoB+OTU8+UvSZO8vFUGlOvS9BKMrTg3YiQGzN8f4mmxtRpYY5DOd89P86S/cN9gE3UAsMDAnMqX29oDxCD0l4xJxIEnbExr3jqHFIi3DO1n1bv63hHKEZ9iOFVH4PuM=

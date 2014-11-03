@@ -29,7 +29,9 @@ module.exports = function(grunt) {
                 "Gruntfile.js",
                 "src/**/*.js",
                 "test/**/*.js"
-            ]
+            ], options: {
+                jshintrc: '.jshintrc'
+            }
         },
         less: {
             development: {
@@ -47,7 +49,7 @@ module.exports = function(grunt) {
                     {
                         expand: true,
                         flatten: true,
-                        src: ['src/client/images'],
+                        src: ['src/client/images/**/*.*'],
                         dest: 'public/img',
                         filter: 'isFile'
                     },
@@ -73,7 +75,10 @@ module.exports = function(grunt) {
                 ]
             },
             js: {
-                files: [{expand: true, cwd: 'src/client/js', src: ['**'], dest: 'public/js'}]
+                files: [
+                    {expand: true, cwd: 'src/client/js', src: ['**'], dest: 'public/js'},
+                    {expand: true, cwd: 'src/common', src: ['constants.js'], dest: 'public/js'}
+                ]
             },
             ejs: {files:[{expand: true, cwd: 'src/client/', src: ['**/*.ejs'], dest: 'public/'}]},
             polymer: {
@@ -82,6 +87,14 @@ module.exports = function(grunt) {
 
         },
         watch: {
+            common: {
+                files: ['src/common/constants.js'],
+                tasks: ['jshint', 'karma','copy:js'],
+                options: {
+                    spawn: false,
+                    livereload: true
+                }
+            },
             scripts: {
                 files: ['src/client/**/*.js'],
                 tasks: ['jshint', 'karma','copy:js'],
@@ -128,6 +141,10 @@ module.exports = function(grunt) {
                     spawn: false,
                     livereload: true
                 }
+            },
+            serverTests: {
+                files: ['src/server/**/*.js', "test/server/**/*.js"],
+                tasks: ['jshint', 'mochaTest']
             }
         },
         connect: {
@@ -162,7 +179,7 @@ module.exports = function(grunt) {
 
                         nodemon.on('config:update', function () {
                             setTimeout(function() {
-                                require('open')('http://127.0.0.1:8080');
+                                require('open')('http://local.foo.com:8080');
                             }, 1000);
                         });
 
@@ -194,4 +211,9 @@ module.exports = function(grunt) {
     grunt.registerTask('build', ['clean','less', 'copy']);
     grunt.registerTask('develop-front', ['clean','less', 'copy', 'connect', 'watch']);
     grunt.registerTask('develop', ['concurrent']);
+
+    grunt.registerTask('heroku:development', 'build');
+    grunt.registerTask('heroku:production', 'build');
+    grunt.registerTask('heroku:', 'build');
+
 };

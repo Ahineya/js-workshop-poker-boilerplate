@@ -42,10 +42,6 @@ After build grunt creates a /public folder and stores all built files in it.
 * /public/vendor - folder that contains third-party libraries, e.g. Polymer
 * /public/components - folder with copied /src/client/polymer-components folder
 
-######Dom work
-I have connected a simple pub/sub, ajax and DOM work library - http://github.com/mrlasking/domwork
-We can use it for this tasks, or I can connect jQuery or smth else.
-
 ######Testing
 There are /tests folder for tests. Feel free to create additional folders under /tests/client and /tests/server directories.
 Any test file should be named as [name].tests.js

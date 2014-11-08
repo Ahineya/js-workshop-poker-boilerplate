@@ -1,0 +1,60 @@
+<polymer-element name="play-table" constructor="PlayTable" attributes="account game">
+    <template>
+        <link rel="stylesheet" href="../css/style.css"/>
+        <content></content>
+        <div id="playTable" class="playTable">
+            <div id="leftPlayer"></div>
+            <div id="rightPlayer"></div>
+            <div id="player">
+                <button on-click="{{buttonClick}}" >Button</button>
+                <div id="playerHand" class="cardstack">
+                </div>
+            </div>
+        </div>
+    </template>
+    <script>
+        (function (globals) {
+            Polymer({
+                publish: {
+                },
+                myHand: {},
+                created: function () {},
+                ready: function () {
+                    socket.on(globals.EVENTS.SERVER.GAME_START,
+                            this.onGameStart.bind(this));
+                },
+                onGameStart: function (gameState) {
+                    this.myHand = gameState[0].hand;
+                },
+                attached: function () {},
+                domReady: function () {},
+                detached: function () {},
+                observe: {
+                    'currentGeneratedCard': 'clickCards'
+                },
+                clickCards: function (oldVal, cardElement) {
+                    cardElement.addEventListener('click', function () {
+                       this.classList.toggle('replaced');
+                    });
+                },
+                myHandChanged: function (oldVal, hand) {
+                    hand.forEach(function (card) {
+                        var cardElement = this.generateCard(card);
+                        this.currentGeneratedCard = cardElement;
+                        this.$.playerHand.appendChild(cardElement);
+                    }.bind(this));
+                },
+                generateCard: function (card) {
+                    var cardElement = document.createElement('div');
+                    var cardType = 'rank' + card.value + card.suite;
+                    cardElement.classList.add('card');
+                    cardElement.classList.add(cardType);
+                    cardElement.innerHTML = card.value + card.suite;
+                    return cardElement;
+                }
+
+            });
+        })(window);
+
+    </script>
+</polymer-element>

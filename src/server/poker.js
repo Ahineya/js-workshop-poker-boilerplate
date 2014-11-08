@@ -1,6 +1,9 @@
 var express = require('express');
 var constants = require('../common/constants.js');
 
+var Deck = require('./modules/Deck.js');
+var Player = require('./modules/Player.js');
+
 var app = express();
 
 var bodyParser = require('body-parser');
@@ -64,14 +67,14 @@ mongoose.connect(config.get('app.mongodb'));
 
     require('./routes.js')(app, passport, User);
 
-    io.use(passportSocketIo.authorize({
+    /*io.use(passportSocketIo.authorize({
         cookieParser: cookieParser,
         key:         'connect.sid',
         secret:      'js-workshop-poker',
         store:       mongoStore,
         success:     onAuthorizeSuccess,
         fail:        onAuthorizeFail
-    }));
+    }));*/
 
     function onAuthorizeSuccess(data, accept){
         console.log('successful connection to socket.io');
@@ -89,15 +92,51 @@ mongoose.connect(config.get('app.mongodb'));
 
     }
 
+
+    var players = [];
+    var deck = new Deck();
+
     io.on('connection', function(socket) {
 
         console.log("Connected: ", socket.id);
-        console.log(socket.request.user.logged_in);
+        //console.log(socket.request.user.logged_in);
+
+        var player = new Player();
+
+        player.assignHand(deck.give(5));
+
+        players.push({
+            player: player,
+            socket: socket
+        });
+
+        if (players.length === 3) {
+            console.log('GAME START');
+
+            var serializedPlayers = players.map(function (player) {
+                var pl = {
+                    hand: player.player.getHand(),
+                    id: player.socket.id
+                };
+                return pl;
+            });
+
+            console.log(serializedPlayers);
+
+
+            players.forEach(function (player) {
+                player.socket.emit(constants.EVENTS.SERVER.GAME_START,
+                    serializedPlayers);
+            });
+        }
 
        //Gameplay here
 
     });
 
+        /*function getSerializedPlayers( players ) {
+            return );
+        }*/
     server.listen(process.env.PORT || 8080, function() {
         console.log('Listening on port %d', server.address().port);
     });

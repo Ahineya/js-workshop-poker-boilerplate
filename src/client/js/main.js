@@ -3,18 +3,8 @@
 
     window.socket = io();
 
-    /*     socket.emit('getHand');
-
-   socket.on('getHand', function(hand) {
-        console.log(hand);
-    });*/
-
-    socket.on('yourData', function(playerData) {
-        console.log('yourData', playerData);
-    });
-
-    socket.on('gameStart', function(gameData) {
-        console.log('gameStart', gameData);
+    socket.on('hand', function(playerData) {
+        console.log('hand', playerData);
     });
 
 })();

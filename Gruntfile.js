@@ -179,7 +179,7 @@ module.exports = function(grunt) {
 
                         nodemon.on('config:update', function () {
                             setTimeout(function() {
-                                require('open')('http://local.foo.com:8080');
+                                require('open')('http://localhost:8080');
                             }, 1000);
                         });
 
@@ -212,8 +212,8 @@ module.exports = function(grunt) {
     grunt.registerTask('develop-front', ['clean','less', 'copy', 'connect', 'watch']);
     grunt.registerTask('develop', ['concurrent']);
 
-    grunt.registerTask('heroku:development', 'build');
-    grunt.registerTask('heroku:production', 'build');
-    grunt.registerTask('heroku:', 'build');
+    //grunt.registerTask('heroku:development', 'build');
+    //grunt.registerTask('heroku:production', 'build');
+    //grunt.registerTask('heroku:', 'build');
 
 };
